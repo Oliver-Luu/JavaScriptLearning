@@ -29,3 +29,5 @@ console.log(quotientFloatingPoint);
 
 var remainderOdd = 11 % 2
 console.log(remainderOdd);
+
+// 18:25 on "Learn JavaScript..." by freeCodeCamp

@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e58532ac-8633-4c60-9861-e8a3c856e598" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Data Types and Variables/Basic Math3.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data Types and Variables/Data and Variable Types1.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data Types and Variables/Variable Assignments2.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data Types, Variables, and Math/4. More Math.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Iteration Statements/ForLoops and Comments.js" beforeDir="false" afterPath="$PROJECT_DIR$/Iteration Statements/ForLoops and Comments1.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data Types, Variables, and Math/1. Data and Variable Types1.js" beforeDir="false" afterPath="$PROJECT_DIR$/Data Types, Variables, and Math/1. Data and Variable Types.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data Types, Variables, and Math/3. Basic Math.js" beforeDir="false" afterPath="$PROJECT_DIR$/Data Types, Variables, and Math/3. Basic Math.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +48,8 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Node.js.4. More Math.js.executor": "Run",
+    "Node.js.Basic Math3.js.executor": "Run",
     "Node.js.Variable Assignments2.js.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
@@ -76,7 +77,8 @@
       <option name="presentableId" value="Default" />
       <updated>1731368498092</updated>
       <workItem from="1731368498093" duration="1118000" />
-      <workItem from="1731395829116" duration="1387000" />
+      <workItem from="1731395829116" duration="1975000" />
+      <workItem from="1731436055367" duration="307000" />
     </task>
     <servers />
   </component>
