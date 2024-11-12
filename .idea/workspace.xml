@@ -4,31 +4,44 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e58532ac-8633-4c60-9861-e8a3c856e598" name="Changes" comment="" />
+    <list default="true" id="e58532ac-8633-4c60-9861-e8a3c856e598" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Data Types and Variables/Basic Math3.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data Types and Variables/Data and Variable Types1.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data Types and Variables/Variable Assignments2.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Iteration Statements/ForLoops and Comments.js" beforeDir="false" afterPath="$PROJECT_DIR$/Iteration Statements/ForLoops and Comments1.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "Oliver-Luu"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Oliver-Luu&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Oliver-Luu/JavaScriptLearning.git",
-    "accountId": "840b10b3-c4c1-4aad-a08b-b27a09c44c60"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Oliver-Luu/JavaScriptLearning.git&quot;,
+    &quot;accountId&quot;: &quot;840b10b3-c4c1-4aad-a08b-b27a09c44c60&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 0
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2oj27SvJ0kLLpjZGCksGNLQiDnE" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -36,6 +49,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Node.js.Variable Assignments2.js.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "node.js.detected.package.eslint": "true",
@@ -62,6 +76,7 @@
       <option name="presentableId" value="Default" />
       <updated>1731368498092</updated>
       <workItem from="1731368498093" duration="1118000" />
+      <workItem from="1731395829116" duration="1387000" />
     </task>
     <servers />
   </component>
