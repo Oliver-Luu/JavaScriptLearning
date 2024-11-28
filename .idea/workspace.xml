@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e58532ac-8633-4c60-9861-e8a3c856e598" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Data Types, Variables, and Math/5.Strings.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Traversals/3.Duplicates.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Functions/1.WordBlanks.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +47,7 @@
   "keyToString": {
     "Node.js.1. Traversals.js.executor": "Run",
     "Node.js.1.Traversals.js.executor": "Run",
+    "Node.js.1.WordBlanks.js.executor": "Run",
     "Node.js.2. Max Min.js.executor": "Run",
     "Node.js.2.MaxMin.js.executor": "Run",
     "Node.js.3.Duplicates.js.executor": "Run",
@@ -94,6 +93,7 @@
       <workItem from="1731737242319" duration="4282000" />
       <workItem from="1732132027665" duration="1647000" />
       <workItem from="1732135128331" duration="643000" />
+      <workItem from="1732824661079" duration="425000" />
     </task>
     <servers />
   </component>
