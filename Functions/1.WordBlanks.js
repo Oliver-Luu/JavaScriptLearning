@@ -5,3 +5,4 @@ function wordBlanks(noun, adjective, verb, adverb){
 }
 
 console.log(wordBlanks("fox", "sly", "jumped", "quickly"));
+console.log(wordBlanks("bird", "small", "flew", "rapidly"));

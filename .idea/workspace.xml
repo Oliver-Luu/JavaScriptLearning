@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e58532ac-8633-4c60-9861-e8a3c856e598" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Functions/1.WordBlanks.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data Types, Variables, and Math/6.Arrays.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Data Types, Variables, and Math/7.Nested Arrays.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Functions/1.WordBlanks.js" beforeDir="false" afterPath="$PROJECT_DIR$/Functions/1.WordBlanks.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +56,8 @@
     "Node.js.3.Duplicates.js.executor": "Run",
     "Node.js.4. More Math.js.executor": "Run",
     "Node.js.5.Strings.js.executor": "Run",
+    "Node.js.6.Arrays.js.executor": "Run",
+    "Node.js.7. Nested Arrays.js.executor": "Run",
     "Node.js.Basic Math3.js.executor": "Run",
     "Node.js.Test.js.executor": "Run",
     "Node.js.Variable Assignments2.js.executor": "Run",
@@ -93,7 +98,8 @@
       <workItem from="1731737242319" duration="4282000" />
       <workItem from="1732132027665" duration="1647000" />
       <workItem from="1732135128331" duration="643000" />
-      <workItem from="1732824661079" duration="425000" />
+      <workItem from="1732824661079" duration="1394000" />
+      <workItem from="1732999445084" duration="1221000" />
     </task>
     <servers />
   </component>
