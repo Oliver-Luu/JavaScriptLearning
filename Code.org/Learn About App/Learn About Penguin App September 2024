@@ -1,0 +1,83 @@
+//Project Found At: https://studio.code.org/projects/applab/OFHsf-WVOdB2tWFJDFs09nw9-MDW7KVqwUL85aULm7w
+
+//Screen transition functions
+onEvent("playButton", "click", function( ) {
+ setScreen("InfoScreen");
+});
+onEvent("nextButton", "click", function( ) {
+  setScreen("InfoScreen2");
+});
+onEvent("next2", "click", function( ) {
+  setScreen("quizScreen");
+});
+onEvent("submitButto", "click", function( ) {
+  setScreen("resultsScreen");
+});
+onEvent("homeInfoScreenButton", "click", function( ){
+  setScreen("HomeScreen");
+});
+onEvent("backInfoScreen2", "click", function ( ){
+  setScreen("InfoScreen");
+});
+onEvent("BackQuizScreen", "click", function ( ){
+  setScreen("InfoScreen2");
+});
+onEvent("returnHome", "click", function( ) {
+  setScreen("HomeScreen");
+});
+
+
+//Quiz Correct Functions
+onEvent("answerOneC", "click", function( ) {
+  showElement("greenCheckmarkQuestion1");
+  hideElement("redXQuestionOne");
+  playSound("sound://category_achievements/lighthearted_bonus_objective_1.mp3", false);
+  hideElement("BackQuizScreen");
+  onEvent("answerTwoA", "click", function( ) {
+    showElement("greenCheckmarkQuestion2");
+    hideElement("redXQuestion2");
+    showElement("submitButto");
+  });
+});
+onEvent("answerTwoA", "click", function( ) {
+  showElement("greenCheckmarkQuestion2");
+  hideElement("redXQuestion2");
+  playSound("sound://category_achievements/lighthearted_bonus_objective_1.mp3", false);
+  hideElement("BackQuizScreen");
+  onEvent("answerOneC", "click", function( ) {
+    showElement("greenCheckmarkQuestion1");
+    hideElement("redXQuestionOne");
+    showElement("submitButto");
+  });
+});
+
+
+//Quiz Incorrect Functions
+onEvent("answerOneA", "click", function( ) {
+  showElement("redXQuestionOne");
+  hideElement("greenCheckmarkQuestion1");
+  hideElement("submitButto");
+  showElement("BackQuizScreen");
+  playSound("sound://category_alerts/cartoon_negative_bling.mp3", false);
+});
+onEvent("answerOneB", "click", function( ) {
+  showElement("redXQuestionOne");
+  hideElement("greenCheckmarkQuestion1");
+  hideElement("submitButto");
+  showElement("BackQuizScreen");
+  playSound("sound://category_alerts/cartoon_negative_bling.mp3", false);
+});
+onEvent("answerTwoB", "click", function( ) {
+  showElement("redXQuestion2");
+  hideElement("greenCheckmarkQuestion2");
+  hideElement("submitButto");
+  showElement("BackQuizScreen");
+  playSound("sound://category_alerts/cartoon_negative_bling.mp3", false);
+});
+onEvent("answerTwoC", "click", function( ) {
+  showElement("redXQuestion2");
+  hideElement("greenCheckmarkQuestion2");
+  hideElement("submitButto");
+  showElement("BackQuizScreen");
+  playSound("sound://category_alerts/cartoon_negative_bling.mp3", false);
+});
