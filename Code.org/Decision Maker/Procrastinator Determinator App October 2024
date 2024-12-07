@@ -1,0 +1,122 @@
+//Project Found At: https://studio.code.org/projects/applab/6dUb6XfGZQgW9JIGsnsFNH5al6SJfCOLvLuJ3wfOQF4
+
+var name;
+var freeHours;
+var homeworkAmount;
+var clicks=0;
+
+//Button To Calculate Procrastination
+onEvent("buttonCalculate", "click", function( ) {
+
+  //Get User Inputs And Update Variables
+  name=getText("inputName");
+  freeHours=getNumber("inputHours");
+  homeworkAmount=getText("dropdownHomework");
+
+  //IF Error Logics, With No Error Function Call At End
+  if (isNaN(freeHours) && name=="" && homeworkAmount=="Select Amount") {
+    showElement("errorTextOutput");
+    setProperty("errorTextOutput","text", "Error: Fill Out Form!");
+  }else if (name==""){
+    showElement("errorTextOutput");
+    setProperty("errorTextOutput","text", "Please Input A Name!");
+  }else if (isNaN(freeHours)){
+    showElement("errorTextOutput");
+    setProperty("errorTextOutput","text", "Please Check Free Time Hours!");
+  }else if (homeworkAmount=="Select Amount"){
+    showElement("errorTextOutput");
+    setProperty("errorTextOutput","text", "Please Select Amount Of Homework");
+  }else {
+    hideElement("errorTextOutput");
+    procrastinationAdvisor();
+    setScreen("resultsScreen");
+  }
+});
+
+//Function to return to home after calculating
+onEvent("buttonHome", "click", function( ) {
+  setProperty("resultsText", "text", "If you're seeing this, something went wrong...");
+  setProperty("resultsScreen", "image", "");
+  setProperty("resultsText", "text-color", "black");
+  setProperty("titleHeaderResultsScreen", "text-color", "black");
+  setProperty("neutralImage", "hidden", true);
+  setProperty("happyImage", "hidden", true);
+  setScreen("homeScreen");
+});
+
+onEvent("colorPallete", "click", function( ){
+  colorRandom();
+  clicks=clicks+1;
+  checkClicks();
+});
+
+onEvent("colorClickMe", "click", function( ){
+  colorRandom();
+  clicks=clicks+1;
+  checkClicks();
+});
+
+//Reset Button
+onEvent("buttonReset", "click", function( ){
+  setProperty("inputName", "text", "");
+  setProperty("inputHours", "text", "");
+  setProperty("dropdownHomework", "index", 0);
+  setProperty("homeScreen", "background-color", "white");
+  if (getText("errorTextOutput")!="Just Procrastinate Already."){
+    hideElement("errorTextOutput");
+  }
+});
+
+//Function to see if you should procrastinate or not (I got lazy and didn't want to write it in the code above)
+//Lines were broken up because if they weren't, it would be pretty hard to read the code
+function procrastinationAdvisor(){
+  if (homeworkAmount=="None"){
+    setProperty("resultsText", "text", name + ", enjoy your freetime with no homework to do!");
+    textColorWhite();
+    setProperty("happyImage", "hidden", false);
+    setProperty("resultsScreen", "image", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwallpaperaccess.com%2Ffull%2F2143094.jpg&f=1&nofb=1&ipt=fecd6bda0b37d139285d3e4fd22c2fe93ea8f5957b5ed72a6f696e2b9e82030d&ipo=images");
+  }else if ((homeworkAmount=="A Little Bit (<3 Hour)" && freeHours>3)
+  ||(homeworkAmount=="A Medium Bit (<9 Hours)" && freeHours >9)
+  ||(homeworkAmount=="A Lot Bit (<15 Hours)" && freeHours>15)){
+    setProperty("resultsText", "text", name + ", enjoy your freetime! \n You can totally procrastinate.");
+    textColorWhite();
+    setProperty("happyImage", "hidden", false);
+    setProperty("resultsScreen", "image", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwallpaperaccess.com%2Ffull%2F2143094.jpg&f=1&nofb=1&ipt=fecd6bda0b37d139285d3e4fd22c2fe93ea8f5957b5ed72a6f696e2b9e82030d&ipo=images");
+  }else if ((homeworkAmount=="A Little Bit (<3 Hour)" && freeHours>=1 && freeHours<=3)
+  ||(homeworkAmount=="A Medium Bit (<9 Hours)" && freeHours>=6 && freeHours <=9)
+  ||(homeworkAmount=="A Lot Bit (<15 Hours)" && freeHours>=11 && freeHours<=15)){
+    setProperty("resultsText", "text", name + ", you are able to Procrastinate! \n Just don't waste too much of your time.");
+    textColorWhite();
+    setProperty("neutralImage", "hidden", false);
+    setProperty("resultsScreen", "image", "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwallpaperaccess.com%2Ffull%2F333489.jpg&f=1&nofb=1&ipt=8a207af877684650eb1d663bc9a9d5a035a828ed67890557101418983c15c9e5&ipo=images");
+  }else if ((homeworkAmount=="A Little Bit (<3 Hour)" && freeHours<1)
+  ||(homeworkAmount=="A Medium Bit (<9 Hours)" && freeHours <6)
+  ||(homeworkAmount=="A Lot Bit (<15 Hours)" && freeHours<11)){
+    setProperty("resultsText", "text", name +
+    ", you definitely shouldn't procrastinate, but when has that ever stopped you? \n Have fun!");
+    textColorWhite();
+    setProperty("neutralImage", "hidden", false);
+    setProperty("resultsScreen", "image", "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fbestanimations.com%2FNature%2FFire%2Ffire-burning-animated-gif-image.gif&f=1&nofb=1&ipt=cbf8abccf090bc6ab55e79e1bb69042192081f13fd883e1283a7a313ce363515&ipo=images");
+  }
+}
+
+//Function To Reduce Two Lines of Code Into One Function
+function textColorWhite (){
+  setProperty("resultsText", "text-color", "white");
+  setProperty("titleHeaderResultsScreen", "text-color", "white");
+}
+
+//Function To Randomize Background Color
+function colorRandom (){
+  var A=randomNumber(0,255);
+  var B=randomNumber(0,255);
+  var C=randomNumber(0,255);
+  setProperty("homeScreen", "background-color", rgb(A,B,C));
+}
+
+function checkClicks (){
+if (clicks==clicks%100==0){
+  showElement("errorTextOutput");
+  setProperty("errorTextOutput", "text", "Just Procrastinate Already.");
+  }
+}
