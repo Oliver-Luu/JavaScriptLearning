@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e58532ac-8633-4c60-9861-e8a3c856e598" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Data Types, Variables, and Math/6.Arrays.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Data Types, Variables, and Math/7.Nested Arrays.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Functions/1.WordBlanks.js" beforeDir="false" afterPath="$PROJECT_DIR$/Functions/1.WordBlanks.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,31 +43,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Node.js.1. Traversals.js.executor": "Run",
-    "Node.js.1.Traversals.js.executor": "Run",
-    "Node.js.1.WordBlanks.js.executor": "Run",
-    "Node.js.2. Max Min.js.executor": "Run",
-    "Node.js.2.MaxMin.js.executor": "Run",
-    "Node.js.3.Duplicates.js.executor": "Run",
-    "Node.js.4. More Math.js.executor": "Run",
-    "Node.js.5.Strings.js.executor": "Run",
-    "Node.js.6.Arrays.js.executor": "Run",
-    "Node.js.7. Nested Arrays.js.executor": "Run",
-    "Node.js.Basic Math3.js.executor": "Run",
-    "Node.js.Test.js.executor": "Run",
-    "Node.js.Variable Assignments2.js.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Node.js.1. Traversals.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.1.Traversals.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.1.WordBlanks.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.2. Max Min.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.2.MaxMin.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.3.Duplicates.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.4. More Math.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.5.Strings.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.6.Arrays.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.7. Nested Arrays.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.Basic Math3.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.Test.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.Variable Assignments2.js.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -100,6 +97,9 @@
       <workItem from="1732135128331" duration="643000" />
       <workItem from="1732824661079" duration="1394000" />
       <workItem from="1732999445084" duration="1221000" />
+      <workItem from="1733000670870" duration="406000" />
+      <workItem from="1733024335923" duration="725000" />
+      <workItem from="1733167233278" duration="2237000" />
     </task>
     <servers />
   </component>

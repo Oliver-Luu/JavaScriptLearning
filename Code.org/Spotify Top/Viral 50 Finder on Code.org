@@ -1,0 +1,290 @@
+//Project Found At: https://studio.code.org/projects/applab/zDah8OtBrt10KIzS0KdQlcxnHVo-uUZEDDG5OrOVsqg
+
+var trackName = [];
+var artist = [];
+var filteredArtist = [];
+var popularArtist = [];
+var artistText = "";
+var trackText = "";
+var filteredText = "";
+var search = [];
+var artistSearch = "";
+var positionSearch = [];
+var chartSelection = "";
+var numb;
+
+//Set Screen Functions
+//Set Screen to Most Popular Artists
+onEvent("topArtistsButton", "click", function(){
+  setScreen("topArtistsScreen");
+  updateScreen();
+});
+//Set Screen to Top Songs
+onEvent("topSongsButton", "click", function(){
+  setScreen("topSongsScreen");
+  updateScreen();
+});
+//Set Screen to All Top 50 Artists
+onEvent("top50Artists", "click", function(){
+  setScreen("allTop50Artists");
+  updateScreen();
+});
+//Set Screen to Search Screen
+onEvent("searchButton", "click", getToSearch);
+onEvent("searchUnderLabel", "click", getToSearch);
+//Set Screen back to Home Screen
+onEvent("home0", "click", getToHome);
+onEvent("home1", "click", getToHome);
+onEvent("home2", "click", getToHome);
+onEvent("home3", "click", getToHome);
+//Back Button to Go Back to Selection
+onEvent("backButton", "click", getToSelection);
+onEvent("currentSelection", "click", getToSelection);
+
+//Get to Home
+function getToHome(){
+  setScreen("homeScreen");
+}
+//Get to Search
+function getToSearch(){
+  hideElement("errorOutput");
+  setScreen("searchScreen");
+}
+//Get to Selection
+function getToSelection(){
+  hideElement("loadingLabel");
+  setScreen("selectionScreen");
+}
+
+//Set Data Set
+onEvent("top50World", "click", function(){
+  setText("loadingLabel", "Loading Top 50 Songs Worldwide...");
+  setText("currentSelection", "Current Selection: Top 50 Worldwide");
+  setText("currentSelection2", "Current Selection: Top 50 Worldwide");
+  showElement("loadingLabel");
+  trackName = getColumn("Top 50 Worldwide", "Track Name");
+  artist = getColumn("Top 50 Worldwide", "Artist");
+  topSwitch();
+  filter();
+  setText("homeLabel", "Worldwide Top 50 Artists and Songs Finder ");
+  chartSelection = "Top 50 Worldwide";
+  setScreen("homeScreen");
+});
+onEvent("top50USA", "click", function(){
+  setText("loadingLabel", "Loading Top 50 Songs USA...");
+  setText("currentSelection", "Current Selection: Top 50 USA");
+  setText("currentSelection2", "Current Selection: Top 50 USA");
+  showElement("loadingLabel");
+  trackName = getColumn("Top 50 USA", "Track Name");
+  artist = getColumn("Top 50 USA", "Artist");
+  topSwitch();
+  filter();
+  setText("homeLabel", "USA Top 50 Artists and Songs Finder ");
+  chartSelection = "Top 50 United States";
+  setScreen("homeScreen");
+});
+onEvent("viral50World", "click", function(){
+  setText("loadingLabel", "Loading Viral 50 Songs Worldwide...");
+  setText("currentSelection", "Current Selection: Viral 50 Worldwide");
+  setText("currentSelection2", "Current Selection: Viral 50 Worldwide");
+  showElement("loadingLabel");
+  trackName = getColumn("Viral 50 Worldwide", "Track Name");
+  artist = getColumn("Viral 50 Worldwide", "Artist");
+  viralSwitch();
+  filter();
+  setText("homeLabel", "Worldwide Viral Artists and Songs Finder ");
+  chartSelection = "Viral 50 Worldwide";
+  setScreen("homeScreen");
+});
+onEvent("viral50USA", "click", function(){
+  setText("loadingLabel", "Loading Viral 50 Songs USA...");
+  setText("currentSelection", "Current Selection: Viral 50 USA");
+  setText("currentSelection2", "Current Selection: Viral 50 USA");
+  showElement("loadingLabel");
+  trackName = getColumn("Viral 50 USA", "Track Name");
+  artist = getColumn("Viral 50 USA", "Artist");
+  viralSwitch();
+  filter();
+  setText("homeLabel", "USA Viral Artists and Songs Finder ");
+  chartSelection = "Viral 50 United States";
+  setScreen("homeScreen");
+});
+
+//Filtering Functions
+//Filter Artists into repeating Artists on Top 50
+function filter(){
+for (var i = 0; i < artist.length; i++) {
+    for (var j = i + 1; j < artist.length; j++) {
+        if (artist[i] == artist[j]){
+            appendItem(popularArtist, artist[i]);
+        }
+    }
+}
+//Filter the repeating Artists and condense them into non-repeating
+for (var k = 0; k < popularArtist.length; k++) {
+    for (var o = k + 1; o < popularArtist.length; o++) {
+        if (popularArtist[k] == popularArtist[o]){
+            removeItem(popularArtist, k);
+            k--;
+        }
+    }
+}
+//To find every artist on the Top 50
+for (var l = 0; l < artist.length; l++){
+  appendItem(filteredArtist, artist[l]);
+}
+for (var m = 0; m < filteredArtist.length; m++) {
+    for (var n = m + 1; n < filteredArtist.length; n++) {
+        if (filteredArtist[m] == filteredArtist[n]){
+            removeItem(filteredArtist, m);
+            m--;
+        }
+    }
+}
+
+//Alphabetizing Lists
+filteredArtist.sort();
+popularArtist.sort();
+}
+
+//Get data for screens
+function updateScreen(){
+artistText = "";
+trackText = "";
+filteredText = "";
+
+  for(var i = 0; i < popularArtist.length-1; i++){
+    artistText += popularArtist[i] + "\n";
+  }
+  artistText += popularArtist[i];
+  setText("artistsLabel", artistText);
+
+  for(var j = 0; j < trackName.length-1; j++){
+    trackText += j+1 + ". " + '"' + trackName[j] + '"' + " by: " + artist[j] + "\n";
+  }
+  trackText += j+1 + ". " + '"' + trackName[j] + '"' + " by: " + artist[j];
+  setText("songsLabel", trackText);
+
+  for(var n = 0; n < filteredArtist.length-1; n++){
+    filteredText += filteredArtist[n] + "\n";
+  }
+  filteredText += filteredArtist[n];
+  setText("allTop50ArtistsLabel", filteredText);
+}
+
+//Random Song
+onEvent("randomSong", "click", function(){
+  hideElement ("errorOutput");
+ var num = randomNumber(0, artist.length-1);
+  if (numb == num){
+    numb ++;
+  } else {
+    numb = num;
+  }
+  setText("searchInput", artist[numb]);
+  showElement("searchOutput");
+  setText("searchOutput", "Artist: " + artist[numb] + "\n" + "Song: " + trackName[numb] + "\n" + 'Position on "' + chartSelection + '": ' + (numb + 1) + "\n" + "\n" + 'Click "Search" To See If The Artist Has Anymore Songs On ' + chartSelection + "!");
+});
+
+//Searching
+onEvent("searchStartButton", "click", function(){
+var num = getText("searchInput");
+search = [];
+artistSearch = "";
+positionSearch = [];
+setText("searchOutput", "");
+if (isNaN(num) == false && (num <= 50 && num >= 1)){
+//Numerical Search
+  num --;
+  numb = num;
+  showElement("searchOutput");
+  setText("searchOutput", "Artist: " + artist[num] + "\n" + "Song: " + trackName[num] + "\n" + 'Position on "' + chartSelection + '": ' + (num + 1));
+} else {
+//Text Search
+for (var i = 0; i < trackName.length; i++){
+  if ((artist[i].toLowerCase() == num.toLowerCase())){
+    appendItem(search, (trackName[i]));
+    appendItem(positionSearch, i + 1);
+    artistSearch = artist[i];
+    } else if (trackName[i].toLowerCase() == num.toLowerCase()){
+    appendItem(search, (trackName[i]));
+    appendItem(positionSearch, i + 1);
+    artistSearch = artist[i];
+    }
+  }
+  if ((num > 50 || num < 1) && (search.length == 0)){
+      setText("errorOutput", "Input a Number Between 1 and 50!");
+      showElement ("errorOutput");
+      hideElement("searchOutput");
+  } else if (search.length == 0){
+      showElement("errorOutput");
+      hideElement("searchOutput");
+      setText("errorOutput", '"' + num + '" Not Found!' + "\n" + "\n" + "Did you:" + "\n" + "\n" + "Misspell The Artist/Song Name?" + "\n" + "\n" + "Forget To Include The Full Name?" + "\n" + "\n" + "Add Extra Characters? (Like Space)");
+  } else {
+      showElement("searchOutput");
+      hideElement("errorOutput");
+      if (search.length > 1){
+        setText("searchOutput", "Artist: " + artistSearch + "\n" + "Positions and Songs:" + "\n");
+        for(var k = 0; k < positionSearch.length; k++){
+        setText("searchOutput", getText("searchOutput") + positionSearch[k] + ": " +search[k] + "\n");
+        }
+      } else {
+        setText("searchOutput", "Artist: " + artistSearch + "\n" + "Song: " + search[0] + "\n" + 'Position on "' + chartSelection + '": ' + positionSearch[0]);
+    }
+  }
+}
+});
+
+//Change Button Text
+function viralSwitch(){
+  setText("topArtistsButton", "Most Viral Artists");
+  setText("topArtistsLabel", "Most Viral Artists");
+  setText("top50Artists", "All Viral 50 Artists");
+  setText("allTop50ArtistsHeader", 'All "Viral 50" Artists');
+  setText("topSongsButton", '"Viral 50" Songs');
+  setText("topSongsLabel", '"Viral 50" Songs');
+}
+function topSwitch(){
+  setText("topArtistsButton", "Most Popular Artists");
+  setText("topArtistsLabel", "Most Popular Artists");
+  setText("top50Artists", "All Top 50 Artists");
+  setText("allTop50ArtistsHeader", 'All "Top 50" Artists');
+  setText("topSongsButton", '"Top 50" Songs');
+  setText("topSongsLabel", '"Top 50" Songs');
+}
+
+//Last Fetch Date
+var currentDate = new Date ();
+var month = currentDate.getMonth() + 1;
+var day = currentDate.getDay();
+var year = currentDate.getFullYear();
+var hour = currentDate.getHours();
+var minute = currentDate.getMinutes();
+var second = currentDate.getSeconds();
+var ampm = "";
+if(day < 10){
+    day = "0" + day;
+  }
+if (hour < 12){
+  ampm = "AM";
+} else {
+  ampm = "PM";
+}
+if (hour == 0){
+  hour = 12;
+}
+if(hour < 10){
+    hour = "0" + hour;
+  }
+if (hour > 12) {
+    hour -=12;
+  }
+if(minute < 10){
+    minute = "0" + minute;
+  }
+if(second < 10){
+    second = "0" + second;
+  }
+var formattedDate = month + "/" + day + "/" + year + " at " + hour + ":" + minute + ":" + second + " " + ampm;
+setText("dateChecked", "Last Updated from Spotify.com at: \n" + formattedDate);
+setText("dateChecked2", "Last Updated from Spotify.com at: \n" + formattedDate);
