@@ -1,5 +1,6 @@
 //Project Found At: https://studio.code.org/projects/applab/zDah8OtBrt10KIzS0KdQlcxnHVo-uUZEDDG5OrOVsqg
 
+//Variable List
 var trackName = [];
 var artist = [];
 var filteredArtist = [];
@@ -32,11 +33,36 @@ onEvent("top50Artists", "click", function(){
 //Set Screen to Search Screen
 onEvent("searchButton", "click", getToSearch);
 onEvent("searchUnderLabel", "click", getToSearch);
+onEvent("homeScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Esc"){
+      getToSelection();
+    }
+});
 //Set Screen back to Home Screen
 onEvent("home0", "click", getToHome);
 onEvent("home1", "click", getToHome);
 onEvent("home2", "click", getToHome);
 onEvent("home3", "click", getToHome);
+onEvent("topArtistsScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Esc"){
+      getToHome();
+    }
+});
+onEvent("topSongsScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Esc"){
+      getToHome();
+    }
+});
+onEvent("allTop50Artists", "keydown", function(keystroke) {
+    if (keystroke.key == "Esc"){
+      getToHome();
+    }
+});
+onEvent("searchScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Esc"){
+      getToHome();
+    }
+});
 //Back Button to Go Back to Selection
 onEvent("backButton", "click", getToSelection);
 onEvent("currentSelection", "click", getToSelection);
@@ -45,6 +71,7 @@ onEvent("currentSelection", "click", getToSelection);
 function getToHome(){
   setScreen("homeScreen");
 }
+
 //Get to Search
 function getToSearch(){
   hideElement("errorOutput");
@@ -54,6 +81,8 @@ function getToSearch(){
 function getToSelection(){
   hideElement("loadingLabel");
   setScreen("selectionScreen");
+  setText("searchInput", "");
+  setText("searchOutput", "");
 }
 
 //Set Data Set
@@ -187,7 +216,13 @@ onEvent("randomSong", "click", function(){
 });
 
 //Searching
-onEvent("searchStartButton", "click", function(){
+onEvent("searchStartButton", "click", searchStart);
+onEvent("searchScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Enter"){
+      searchStart();
+    }
+});
+function searchStart(){
 var num = getText("searchInput");
 search = [];
 artistSearch = "";
@@ -230,10 +265,10 @@ for (var i = 0; i < trackName.length; i++){
         }
       } else {
         setText("searchOutput", "Artist: " + artistSearch + "\n" + "Song: " + search[0] + "\n" + 'Position on "' + chartSelection + '": ' + positionSearch[0]);
+      }
     }
   }
 }
-});
 
 //Change Button Text
 function viralSwitch(){
@@ -273,11 +308,11 @@ if (hour < 12){
 if (hour == 0){
   hour = 12;
 }
-if(hour < 10){
-    hour = "0" + hour;
-  }
 if (hour > 12) {
     hour -=12;
+  }
+if(hour < 10){
+    hour = "0" + hour;
   }
 if(minute < 10){
     minute = "0" + minute;
