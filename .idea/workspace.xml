@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e58532ac-8633-4c60-9861-e8a3c856e598" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Code.org/AP Exam/WordleGame" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code.org/Spotify Search App/Top and Viral 50 Finder on Code.org December 2024" beforeDir="false" afterPath="$PROJECT_DIR$/Code.org/Spotify Search App/Top and Viral 50 Finder on Code.org December 2024" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,8 +17,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaScript File" />
         <option value="TypeScript File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -35,6 +37,9 @@
     &quot;accountId&quot;: &quot;840b10b3-c4c1-4aad-a08b-b27a09c44c60&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 0
@@ -51,14 +56,20 @@
     &quot;Node.js.1.WordBlanks.js.executor&quot;: &quot;Run&quot;,
     &quot;Node.js.2. Max Min.js.executor&quot;: &quot;Run&quot;,
     &quot;Node.js.2.MaxMin.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.2.betterUnique(uniqueV2).js.executor&quot;: &quot;Run&quot;,
     &quot;Node.js.3.Duplicates.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.3.bettererUnique(uniqueV3).js.executor&quot;: &quot;Run&quot;,
     &quot;Node.js.4. More Math.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.4.betterererUnique(uniqueV4).js.executor&quot;: &quot;Run&quot;,
     &quot;Node.js.5.Strings.js.executor&quot;: &quot;Run&quot;,
     &quot;Node.js.6.Arrays.js.executor&quot;: &quot;Run&quot;,
     &quot;Node.js.7. Nested Arrays.js.executor&quot;: &quot;Run&quot;,
     &quot;Node.js.Basic Math3.js.executor&quot;: &quot;Run&quot;,
     &quot;Node.js.Test.js.executor&quot;: &quot;Run&quot;,
     &quot;Node.js.Variable Assignments2.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.betterUnique(uniqueV2).js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.betterUnique.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.randomNumberGenerator.js.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -66,10 +77,17 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;Console&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Random Number Generator" />
+      <recent name="$PROJECT_DIR$/" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -105,6 +123,10 @@
       <workItem from="1733540226617" duration="1455000" />
       <workItem from="1733855589954" duration="85000" />
       <workItem from="1737749288353" duration="900000" />
+      <workItem from="1737753089677" duration="10086000" />
+      <workItem from="1738005379577" duration="616000" />
+      <workItem from="1738089103572" duration="19000" />
+      <workItem from="1738354901091" duration="6005000" />
     </task>
     <servers />
   </component>

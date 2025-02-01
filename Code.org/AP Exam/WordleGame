@@ -1,0 +1,401 @@
+//Icons are used from code.org's built in AppLab
+//Game design is inspired by NYT's Wordle Game found at https://www.nytimes.com/games/wordle/
+//The "Wordle" answers used in this app game from:
+//studio.code.org in the "Data" tab
+var wordleAnswers = getColumn("Wordle", "validWordleAnswer");
+//The "Wordle" guesses used in this app game from:
+//studio.code.org in the "Data" tab
+var wordleGuesses = getColumn("Wordle", "validWordleGuess");
+//More possible "Wordle" guesses that are not included in the original data set:
+//studio.code.org in the "Data" tab
+var moreWords = getColumn("Words", "Word");
+var moreWordsLength = getColumn("Words", "Length");
+//wordleSessionAnswer is the word the player is trying to find (target word)
+//wordleGuess is the most recent inputted guess
+var wordleSessionAnswer = "";
+var wordleGuess = "";
+//guessAmount is the amount of guesses a player has made
+//letterPosition is the position the player has written to, or is deleting from
+var guessAmount = 0;
+var letterPosition = 0;
+//These determine whether the game ends, and what displays after gameover
+var gameOver = false;
+var winner = false;
+//Used to prevent duplicate answers from being submitted
+var guess0 = "";
+var guess1 = "";
+var guess2 = "";
+var guess3 = "";
+var guess4 = "";
+
+//Removes "null" in wordleAnswers
+for (var i = wordleAnswers.length-1; i > 0; i--){
+  //Checks if wordleAnswers at "i" is equal to "null"
+  if (wordleAnswers[i] == null){
+    removeItem(wordleAnswers, i);
+  }
+}
+//Adds more words from "moreWords" list for more "guesses"
+for (var i = 0; i < moreWords.length; i++){
+  if (moreWordsLength[i] == 5){
+    appendItem(wordleGuesses, moreWords[i]);
+  }
+}
+//Adds words from "wordleAnswers" list for more "guesses" (surprising, not all validWordleAnswers are in  validWordleGuess)
+for (var i = 0; i < wordleAnswers.length; i++){
+  appendItem(wordleGuesses, wordleAnswers[i]);
+}
+//Adds the word "crane" to wordleGuesses since I actually use this word alot for my first guess
+appendItem(wordleGuesses, "crane");
+
+//Prepares the board for a new game on program startup
+newGame();
+
+//Transitions from loading screen to home screen
+setScreen("homeScreen");
+
+//onEvent for when user inputs a character into the keyboard
+onEvent("wordleScreen", "keypress", function(keystroke){
+  //Checks if inputted keystroke is a alphabetical character using an ASCII table (assistance from OpenAI's ChatGPT)
+  if ((((keystroke.key).charCodeAt(0) >= 97 && (keystroke.key).charCodeAt(0) <= 122) ||
+  ((keystroke.key).charCodeAt(0) >= 65 && (keystroke.key).charCodeAt(0) <= 90)) && gameOver == false){
+  //Checks how many guesses the user has made (used to determine which "wordle" line to write to)
+  if (guessAmount == 0){
+    //Limits the user to only input characters one row at a time
+    if (letterPosition < 5){
+      letterPosition++;
+      setText("letter"+letterPosition, (keystroke.key).toUpperCase());
+      hideElement("errorLabel");
+    }
+  }
+  if (guessAmount == 1){
+    if (letterPosition < 10){
+      letterPosition++;
+      setText("letter"+letterPosition, (keystroke.key).toUpperCase());
+      hideElement("errorLabel");
+    }
+  }
+  if (guessAmount == 2){
+    if (letterPosition < 15){
+      letterPosition++;
+      setText("letter"+letterPosition, (keystroke.key).toUpperCase());
+      hideElement("errorLabel");
+    }
+  }
+  if (guessAmount == 3){
+    if (letterPosition < 20){
+      letterPosition++;
+      setText("letter"+letterPosition, (keystroke.key).toUpperCase());
+      hideElement("errorLabel");
+    }
+  }
+  if (guessAmount == 4){
+    if (letterPosition < 25){
+      letterPosition++;
+      setText("letter"+letterPosition, (keystroke.key).toUpperCase());
+      hideElement("errorLabel");
+    }
+  }
+  if (guessAmount == 5){
+    if (letterPosition < 30){
+      letterPosition++;
+      setText("letter"+letterPosition, (keystroke.key).toUpperCase());
+      hideElement("errorLabel");
+      }
+    }
+  }
+});
+
+onEvent("deleteButton", "click", deleteLetter);
+onEvent("wordleScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Backspace"){
+      deleteLetter();
+    }
+});
+
+onEvent("enterButton", "click", checkValidGuess);
+onEvent("wordleScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Enter"){
+      checkValidGuess();
+    }
+});
+
+onEvent("playButton", "click", function(){
+  setScreen("wordleScreen");
+  setText("playButton", "Continue");
+  showElement("restartOrNewGame");
+  showElement("inProgress");
+  setText("guessesRemaining", "Guesses Remaining: " + (6-guessAmount));
+  showElement("guessesRemaining");
+});
+onEvent("homeScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Enter"){
+      setScreen("wordleScreen");
+      setText("playButton", "Continue");
+      showElement("restartOrNewGame");
+      showElement("inProgress");
+      setText("guessesRemaining", "Guesses Remaining: " + (6-guessAmount));
+      showElement("guessesRemaining");
+    }
+});
+
+onEvent("homeButton", "click", function(){
+  setScreen("homeScreen");
+});
+onEvent("wordleScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Esc"){
+      setScreen("homeScreen");
+    }
+});
+
+onEvent("restartOrNewGame", "click", function(){
+  setScreen("confirmationScreen");
+});
+onEvent("confirmNewButton", "click", function(){
+  newGame();
+  setScreen("wordleScreen");
+});
+onEvent("confirmationScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Enter"){
+      newGame();
+      setScreen("wordleScreen");
+    }
+});
+onEvent("goBackButton", "click", function(){
+  setScreen("homeScreen");
+});
+onEvent("confirmationScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Esc"){
+      setScreen("homeScreen");
+    }
+});
+
+//Prepares the "Wordle" board for a new game
+function newGame(){
+  var random = randomNumber(0, wordleAnswers.length-1);
+  setText("wordleNumber", "Wordle #" + random);
+  setText("wordleLabel", "Wordle#" + random);
+  setText("restartOrNewGame", "Restart");
+  setText("confirmationLabel", "Are You Sure That You Want To Restart?");
+  setText("confirmNewButton", "Restart");
+  setText("playButton", "Play");
+  wordleSessionAnswer = (wordleAnswers[random]).toUpperCase();
+  guessAmount = 0;
+  letterPosition = 0;
+  gameOver = false;
+  winner = false;
+  for (var i = 1; i < 31; i++){
+    setText("letter" + i, "");
+    setProperty("letter" + i, "background-color", "black");
+  }
+}
+//Ends game and brings up play again screen
+function endGame(){
+  gameOver = true;
+  setText("restartOrNewGame", "New Game");
+  setText("confirmNewButton", "New Game");
+  setText("confirmationLabel", "Are You Sure That You Want To Start A New Game?");
+}
+//Deletes a letter when called from the on-event statement above
+function deleteLetter(){
+  hideElement("errorLabel");
+  if (guessAmount == 0){
+    if (letterPosition < 6 && letterPosition > 0){
+      setText("letter"+letterPosition, "");
+      letterPosition--;
+    }
+  }
+  if (guessAmount == 1){
+    if (letterPosition < 12 && letterPosition > 5){
+      setText("letter"+letterPosition, "");
+      letterPosition--;
+    }
+  }
+  if (guessAmount == 2){
+    if (letterPosition < 18 && letterPosition > 10){
+      setText("letter"+letterPosition, "");
+      letterPosition--;
+    }
+  }
+  if (guessAmount == 3){
+    if (letterPosition < 24 && letterPosition > 15){
+      setText("letter"+letterPosition, "");
+      letterPosition--;
+    }
+  }
+  if (guessAmount == 4){
+    if (letterPosition < 30 && letterPosition > 20){
+      setText("letter"+letterPosition, "");
+      letterPosition--;
+    }
+  }
+  if (guessAmount == 5){
+    if (letterPosition < 36 && letterPosition > 25){
+      setText("letter"+letterPosition, "");
+      letterPosition--;
+    }
+  }
+}
+
+//Checks if inputted guess is valid
+//Initially parses characters in program textboxes (labelled by "letter#")
+//Then checks if that word exists in the "wordleGuesses" and if it is a duplicate guess
+//If it is not an invalid guess, calls validGuessHandling function
+//If it is an invalid guess, calls userErrorHandling function
+function checkValidGuess(){
+  //Checks if game is over
+  if (gameOver == false){
+    //Parsing User Input Into String
+    if (guessAmount == 0){
+      wordleGuess = getText("letter1") + getText("letter2") + getText("letter3") + getText("letter4") + getText("letter5");
+    }
+    if (guessAmount == 1){
+      wordleGuess = getText("letter6") + getText("letter7") + getText("letter8") + getText("letter9") + getText("letter10");
+    }
+    if (guessAmount == 2){
+      wordleGuess = getText("letter11") + getText("letter12") + getText("letter13") + getText("letter14") + getText("letter15");
+    }
+    if (guessAmount == 3){
+      wordleGuess = getText("letter16") + getText("letter17") + getText("letter18") + getText("letter19") + getText("letter20");
+    }
+    if (guessAmount == 4){
+      wordleGuess = getText("letter21") + getText("letter22") + getText("letter23") + getText("letter24") + getText("letter25");
+    }
+    if (guessAmount == 5){
+     wordleGuess = getText("letter26") + getText("letter27") + getText("letter28") + getText("letter29") + getText("letter30");
+    }
+
+    //Checking if user guess exists in wordleGuesses or is a duplicate guess
+    if ((wordleGuesses.indexOf(wordleGuess.toLowerCase()) != -1)&&(wordleGuess != guess0)&&(wordleGuess != guess1)&&(wordleGuess != guess2)&&(wordleGuess != guess3)&&(wordleGuess != guess4)){
+      validGuessHandling();
+    }
+    else {
+      userErrorHandling();
+    }
+  }
+}
+
+//Handles situation where user guess is valid
+//Calls function to set box color
+//Sets "guess" variable for duplicates verification
+//Increases "guessAmount" by +1
+function validGuessHandling(){
+  setColorBoxAndSetWin();
+    if (getText("letter5") != "" && guessAmount == 0){
+      guess0 = wordleGuess;
+      guessAmount ++;
+  } else if (getText("letter10") != "" && guessAmount == 1){
+      guess1 = wordleGuess;
+      guessAmount ++;
+  } else if (getText("letter15") != "" && guessAmount == 2){
+      guess2 = wordleGuess;
+      guessAmount ++;
+  } else if (getText("letter20") != "" && guessAmount == 3){
+      guess3 = wordleGuess;
+      guessAmount ++;
+  } else if (getText("letter25") != "" && guessAmount == 4){
+      guess4 = wordleGuess;
+      guessAmount ++;
+  } else if (getText("letter30") != "" && guessAmount == 5){
+      guessAmount ++;
+    }
+  }
+
+//Handles situation where user guess is invalid and displays error message
+function userErrorHandling(){
+  if ((wordleGuess == guess0)||(wordleGuess == guess1)||(wordleGuess == guess2)||(wordleGuess == guess3)||(wordleGuess == guess4)){
+    setText("errorLabel", "Duplicate Guess");
+  }     else if (getText("letter5") == "" && guessAmount == 0){
+          setText("errorLabel", "Not enough letters");
+      } else if (getText("letter10") == "" && guessAmount == 1){
+          setText("errorLabel", "Not enough letters");
+      } else if (getText("letter15") == "" && guessAmount == 2){
+          setText("errorLabel", "Not enough letters");
+      } else if (getText("letter20") == "" && guessAmount == 3){
+          setText("errorLabel", "Not enough letters");
+      } else if (getText("letter25") == "" && guessAmount == 4){
+          setText("errorLabel", "Not enough letters");
+      } else if (getText("letter30") == "" && guessAmount == 5){
+          setText("errorLabel", "Not enough letters");
+      } else {
+          setText("errorLabel", "Not in word list");
+      }
+    showElement("errorLabel");
+}
+//Sets the color of the boxes and checks to see if game has been won
+function setColorBoxAndSetWin () {
+  var ratings = checkGuessValidity(wordleGuess, wordleSessionAnswer);
+    if (guessAmount == 0){
+      setProperty("letter1", "background-color", ratings[0]);
+      setProperty("letter2", "background-color", ratings[1]);
+      setProperty("letter3", "background-color", ratings[2]);
+      setProperty("letter4", "background-color", ratings[3]);
+      setProperty("letter5", "background-color", ratings[4]);
+    } else if (guessAmount == 1){
+      setProperty("letter6", "background-color", ratings[0]);
+      setProperty("letter7", "background-color", ratings[1]);
+      setProperty("letter8", "background-color", ratings[2]);
+      setProperty("letter9", "background-color", ratings[3]);
+      setProperty("letter10", "background-color", ratings[4]);
+    } else if (guessAmount == 2){
+      setProperty("letter11", "background-color", ratings[0]);
+      setProperty("letter12", "background-color", ratings[1]);
+      setProperty("letter13", "background-color", ratings[2]);
+      setProperty("letter14", "background-color", ratings[3]);
+      setProperty("letter15", "background-color", ratings[4]);
+    } else if (guessAmount == 3){
+      setProperty("letter16", "background-color", ratings[0]);
+      setProperty("letter17", "background-color", ratings[1]);
+      setProperty("letter18", "background-color", ratings[2]);
+      setProperty("letter19", "background-color", ratings[3]);
+      setProperty("letter20", "background-color", ratings[4]);
+    } else if (guessAmount == 4){
+      setProperty("letter21", "background-color", ratings[0]);
+      setProperty("letter22", "background-color", ratings[1]);
+      setProperty("letter23", "background-color", ratings[2]);
+      setProperty("letter24", "background-color", ratings[3]);
+      setProperty("letter25", "background-color", ratings[4]);
+    } else{
+      setProperty("letter26", "background-color", ratings[0]);
+      setProperty("letter27", "background-color", ratings[1]);
+      setProperty("letter28", "background-color", ratings[2]);
+      setProperty("letter29", "background-color", ratings[3]);
+      setProperty("letter30", "background-color", ratings[4]);
+      endGame();
+    }
+  if ((ratings[0] == "green") && (ratings[1] == "green") && (ratings[2] == "green") && (ratings[3] == "green") && (ratings[4] == "green")){
+    winner = true;
+    endGame();
+  }
+}
+
+//Algorithm that determines which letters are in the right position, wrong position but present in target word, and not in the target word
+//Return of "green" means the letter is present in the target word and is in the right postion - Best scenario for player
+//Return of "gold" means the letter is present in the target word but is in the wrong position - Okay scenario for player
+//Return of "gray" means the letter is not present in the target word - Worse scenario for player
+//guess {string} - the guess the player has inputted and needs to be checked
+//answer {string} - the answer to the puzzle that is used to check against the guess
+//ratings {list} - list used to indicate which letters are "green", "yellow", and "gray"
+function checkGuessValidity (guess, answer){
+  var guessSubstring = [guess.substring(0, 1), guess.substring(1, 2), guess.substring(2, 3), guess.substring(3, 4), guess.substring(4, 5)];
+  var answerSubstring = [answer.substring(0, 1), answer.substring(1, 2), answer.substring(2, 3), answer.substring(3, 4), answer.substring(4, 5)];
+  var ratings = [];
+  for (var i = 0; i < 5; i++){
+    if (guessSubstring[i] == answerSubstring[i]){
+      insertItem(ratings, i, "green");
+      removeItem(guessSubstring, i);
+      removeItem(answerSubstring, i);
+      insertItem(guessSubstring, i, "!");
+      insertItem(answerSubstring, i, "?");
+    } else {
+      insertItem(ratings, i, "gray");
+    }
+  }
+  for (var j = 0; j < 5; j++){
+    if (answerSubstring.indexOf(guessSubstring[j]) != -1){
+      removeItem(ratings, j);
+      insertItem(ratings, j, "gold");
+    }
+  }
+  return ratings;
+}
