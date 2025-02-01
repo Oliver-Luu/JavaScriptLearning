@@ -1,3 +1,8 @@
+//To-Do:
+//Update endGame screen
+//Add session statistics including % victory
+
+
 //Icons are used from code.org's built in AppLab
 //Game design is inspired by NYT's Wordle Game found at https://www.nytimes.com/games/wordle/
 //The "Wordle" answers used in this app game from:
@@ -106,13 +111,14 @@ onEvent("wordleScreen", "keypress", function(keystroke){
   }
 });
 
+//Deleting letters "on event" - calls deleteLetter function
 onEvent("deleteButton", "click", deleteLetter);
 onEvent("wordleScreen", "keydown", function(keystroke) {
     if (keystroke.key == "Backspace"){
       deleteLetter();
     }
 });
-
+//Sends Wordle guess to be evaluated - calls checkValidGuess function
 onEvent("enterButton", "click", checkValidGuess);
 onEvent("wordleScreen", "keydown", function(keystroke) {
     if (keystroke.key == "Enter"){
@@ -120,25 +126,14 @@ onEvent("wordleScreen", "keydown", function(keystroke) {
     }
 });
 
-onEvent("playButton", "click", function(){
-  setScreen("wordleScreen");
-  setText("playButton", "Continue");
-  showElement("restartOrNewGame");
-  showElement("inProgress");
-  setText("guessesRemaining", "Guesses Remaining: " + (6-guessAmount));
-  showElement("guessesRemaining");
-});
+//Go to Wordle Screen from Home Screen
+onEvent("playButton", "click", setWordleScreen);
 onEvent("homeScreen", "keydown", function(keystroke) {
     if (keystroke.key == "Enter"){
-      setScreen("wordleScreen");
-      setText("playButton", "Continue");
-      showElement("restartOrNewGame");
-      showElement("inProgress");
-      setText("guessesRemaining", "Guesses Remaining: " + (6-guessAmount));
-      showElement("guessesRemaining");
+      setWordleScreen();
     }
 });
-
+//Go To Home Screen from Wordle Screen
 onEvent("homeButton", "click", function(){
   setScreen("homeScreen");
 });
@@ -147,7 +142,25 @@ onEvent("wordleScreen", "keydown", function(keystroke) {
       setScreen("homeScreen");
     }
 });
-
+//Go to wordleScreen From endGameScreen
+onEvent("goToPuzzleButton", "click", function(){
+  setScreen("wordleScreen");
+});
+onEvent("endGameScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Backspace"){
+      setScreen("wordleScreen");
+    }
+});
+//Go to homeScreen From endGameScreen
+onEvent("goToHomeButton", "click", function(){
+  setScreen("homeScreen");
+});
+onEvent("endGameScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Esc"){
+      setScreen("homeScreen");
+    }
+});
+//Restarting or New Game "on events"
 onEvent("restartOrNewGame", "click", function(){
   setScreen("confirmationScreen");
 });
@@ -156,6 +169,16 @@ onEvent("confirmNewButton", "click", function(){
   setScreen("wordleScreen");
 });
 onEvent("confirmationScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Enter"){
+      newGame();
+      setScreen("wordleScreen");
+    }
+});
+onEvent("newGameButton", "click", function(){
+  newGame();
+  setScreen("wordleScreen");
+});
+onEvent("endGameScreen", "keydown", function(keystroke) {
     if (keystroke.key == "Enter"){
       newGame();
       setScreen("wordleScreen");
@@ -170,13 +193,22 @@ onEvent("confirmationScreen", "keydown", function(keystroke) {
     }
 });
 
+
+//Sets screen to playable screen, and sets up text elements for confirmation and home pages
+function setWordleScreen(){
+  setScreen("wordleScreen");
+  setText("playButton", "Continue");
+  showElement("restartOrNewGame");
+  showElement("inProgress");
+  showElement("guessesRemaining");
+}
 //Prepares the "Wordle" board for a new game
 function newGame(){
   var random = randomNumber(0, wordleAnswers.length-1);
   setText("wordleNumber", "Wordle #" + random);
   setText("wordleLabel", "Wordle#" + random);
   setText("restartOrNewGame", "Restart");
-  setText("confirmationLabel", "Are You Sure That You Want To Restart?");
+  setText("confirmationLabel", "Restart?");
   setText("confirmNewButton", "Restart");
   setText("playButton", "Play");
   wordleSessionAnswer = (wordleAnswers[random]).toUpperCase();
@@ -192,10 +224,19 @@ function newGame(){
 //Ends game and brings up play again screen
 function endGame(){
   gameOver = true;
+  if (winner == true){
+    setText("inProgress", "Wordle Victory!");
+  } else {
+    setText("inProgress", "Game Finished");
+  }
+  setText("guessesRemaining", "Guesses Remaining: None");
+  setText("playButton", "Go To Puzzle");
   setText("restartOrNewGame", "New Game");
   setText("confirmNewButton", "New Game");
-  setText("confirmationLabel", "Are You Sure That You Want To Start A New Game?");
+  setText("confirmationLabel", "New Game?");
+  setScreen("endGameScreen");
 }
+
 //Deletes a letter when called from the on-event statement above
 function deleteLetter(){
   hideElement("errorLabel");
@@ -243,6 +284,9 @@ function deleteLetter(){
 //If it is not an invalid guess, calls validGuessHandling function
 //If it is an invalid guess, calls userErrorHandling function
 function checkValidGuess(){
+  if (gameOver == true){
+    setScreen("endGameScreen");
+  }
   //Checks if game is over
   if (gameOver == false){
     //Parsing User Input Into String
@@ -299,26 +343,31 @@ function validGuessHandling(){
   } else if (getText("letter30") != "" && guessAmount == 5){
       guessAmount ++;
     }
+    if (endGame == false){
+      setText("guessesRemaining", "Guesses Remaining: " + (6-guessAmount));
+    }
   }
 
 //Handles situation where user guess is invalid and displays error message
 function userErrorHandling(){
-  if ((wordleGuess == guess0)||(wordleGuess == guess1)||(wordleGuess == guess2)||(wordleGuess == guess3)||(wordleGuess == guess4)){
+  if(wordleGuess == ""){
+    setText("errorLabel", "No Guess Provided");
+  } else if ((wordleGuess == guess0)||(wordleGuess == guess1)||(wordleGuess == guess2)||(wordleGuess == guess3)||(wordleGuess == guess4)){
     setText("errorLabel", "Duplicate Guess");
-  }     else if (getText("letter5") == "" && guessAmount == 0){
-          setText("errorLabel", "Not enough letters");
+      } else if (getText("letter5") == "" && guessAmount == 0){
+          setText("errorLabel", "Not Enough letters");
       } else if (getText("letter10") == "" && guessAmount == 1){
-          setText("errorLabel", "Not enough letters");
+          setText("errorLabel", "Not Enough letters");
       } else if (getText("letter15") == "" && guessAmount == 2){
-          setText("errorLabel", "Not enough letters");
+          setText("errorLabel", "Not Enough letters");
       } else if (getText("letter20") == "" && guessAmount == 3){
-          setText("errorLabel", "Not enough letters");
+          setText("errorLabel", "Not Enough letters");
       } else if (getText("letter25") == "" && guessAmount == 4){
-          setText("errorLabel", "Not enough letters");
+          setText("errorLabel", "Not Enough letters");
       } else if (getText("letter30") == "" && guessAmount == 5){
-          setText("errorLabel", "Not enough letters");
+          setText("errorLabel", "Not Enough letters");
       } else {
-          setText("errorLabel", "Not in word list");
+          setText("errorLabel", "Not In Word List");
       }
     showElement("errorLabel");
 }
