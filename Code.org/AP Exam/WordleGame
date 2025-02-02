@@ -1,5 +1,4 @@
 //To-Do:
-//Update endGame screen
 //Add session statistics including #played, % victory, current streak, max streak
 //Guess distribution
 
@@ -167,6 +166,7 @@ onEvent("endGameScreen", "keydown", function(keystroke) {
 });
 //Go to homeScreen From endGameScreen
 onEvent("goToHomeButton", "click", function(){
+  setText("playButton", "Go To Puzzle");
   setScreen("homeScreen");
 });
 onEvent("endGameScreen", "keydown", function(keystroke) {
@@ -207,6 +207,129 @@ onEvent("confirmationScreen", "keydown", function(keystroke) {
     }
 });
 
+onEvent("a", "click", function(){
+  onScreenKeyboardInput("A");
+});
+onEvent("b", "click", function(){
+  onScreenKeyboardInput("B");
+});
+onEvent("c", "click", function(){
+  onScreenKeyboardInput("C");
+});
+onEvent("d", "click", function(){
+  onScreenKeyboardInput("D");
+});
+onEvent("e", "click", function(){
+  onScreenKeyboardInput("E");
+});
+onEvent("f", "click", function(){
+  onScreenKeyboardInput("F");
+});
+onEvent("g", "click", function(){
+  onScreenKeyboardInput("G");
+});
+onEvent("h", "click", function(){
+  onScreenKeyboardInput("H");
+});
+onEvent("i", "click", function(){
+  onScreenKeyboardInput("I");
+});
+onEvent("j", "click", function(){
+  onScreenKeyboardInput("J");
+});
+onEvent("k", "click", function(){
+  onScreenKeyboardInput("K");
+});
+onEvent("l", "click", function(){
+  onScreenKeyboardInput("L");
+});
+onEvent("m", "click", function(){
+  onScreenKeyboardInput("M");
+});
+onEvent("n", "click", function(){
+  onScreenKeyboardInput("N");
+});
+onEvent("o", "click", function(){
+  onScreenKeyboardInput("O");
+});
+onEvent("p", "click", function(){
+  onScreenKeyboardInput("P");
+});
+onEvent("q", "click", function(){
+  onScreenKeyboardInput("Q");
+});
+onEvent("r", "click", function(){
+  onScreenKeyboardInput("R");
+});
+onEvent("s", "click", function(){
+  onScreenKeyboardInput("S");
+});
+onEvent("t", "click", function(){
+  onScreenKeyboardInput("T");
+});
+onEvent("u", "click", function(){
+  onScreenKeyboardInput("U");
+});
+onEvent("v", "click", function(){
+  onScreenKeyboardInput("V");
+});
+onEvent("w", "click", function(){
+  onScreenKeyboardInput("W");
+});
+onEvent("x", "click", function(){
+  onScreenKeyboardInput("X");
+});
+onEvent("y", "click", function(){
+  onScreenKeyboardInput("Y");
+});
+onEvent("z", "click", function(){
+  onScreenKeyboardInput("Z");
+});
+function onScreenKeyboardInput(key){
+  if (guessAmount == 0){
+    //Limits the user to only input characters one row at a time
+    if (letterPosition < 5){
+      letterPosition++;
+      setText("letter"+letterPosition, key);
+      hideElement("errorLabel");
+    }
+  }
+  if (guessAmount == 1){
+    if (letterPosition < 10){
+      letterPosition++;
+      setText("letter"+letterPosition, key);
+      hideElement("errorLabel");
+    }
+  }
+  if (guessAmount == 2){
+    if (letterPosition < 15){
+      letterPosition++;
+      setText("letter"+letterPosition, key);
+      hideElement("errorLabel");
+    }
+  }
+  if (guessAmount == 3){
+    if (letterPosition < 20){
+      letterPosition++;
+      setText("letter"+letterPosition, key);
+      hideElement("errorLabel");
+    }
+  }
+  if (guessAmount == 4){
+    if (letterPosition < 25){
+      letterPosition++;
+      setText("letter"+letterPosition, key);
+      hideElement("errorLabel");
+    }
+  }
+  if (guessAmount == 5){
+    if (letterPosition < 30){
+      letterPosition++;
+      setText("letter"+letterPosition, key);
+      hideElement("errorLabel");
+      }
+    }
+}
 function resetKeyboard(){
   setGray("q");
   setGray("w");
@@ -279,10 +402,9 @@ function newGame(){
 }
 //Ends game and brings up play again screen
 function endGame(){
-  gameOver = true;
+var message = "";
+gameOver = true;
   if (winner == true){
-    setText("inProgress", "Wordle Victory!");
-    setText("endGameLabel", "You Won! \n" + "\n" + "The Wordle was: \n" + wordleSessionAnswer);
     gamesWon++;
     streak++;
     if (streak > maxStreak){
@@ -290,23 +412,31 @@ function endGame(){
     }
     if (guessAmount == 0){
     setText("wordleLabel", "Genius");
+    message = "Genius!";
     firstTry++;
   } else if (guessAmount == 1){
     setText("wordleLabel", "Magnificent");
+    message = "Magnificent!";
     secondTry++;
   } else if (guessAmount == 2){
     setText("wordleLabel", "Impressive");
+    message = "Impressive!";
     thirdTry++;
   } else if (guessAmount == 3){
     setText("wordleLabel", "Splendid");
+    message = "Splendid!";
     fourthTry++;
   } else if (guessAmount == 4){
     setText("wordleLabel", "Great");
+    message = "Great!";
     fifthTry++;
   } else if (guessAmount == 5){
     setText("wordleLabel", "Phew");
+    message = "Phew!";
     sixthTry++;
     }
+    setText("inProgress", "Wordle Victory!");
+    setText("endGameLabel", message + "\n" + "You Won! \n" + "\n" + "The Wordle was: \n" + wordleSessionAnswer);
   } else {
     setText("inProgress", "Game Finished");
     setText("wordleLabel", "Nice Try");
@@ -506,6 +636,7 @@ function setColorBoxAndSetWin () {
 }
 
 //Algorithm that determines which letters are in the right position, wrong position but present in target word, and not in the target word
+//In addition, sets color of keyboard so player can see color status of their letter guesses
 //Return of "green" means the letter is present in the target word and is in the right postion - Best scenario for player
 //Return of "gold" means the letter is present in the target word but is in the wrong position - Okay scenario for player
 //Return of "gray" means the letter is not present in the target word - Worse scenario for player
@@ -535,6 +666,8 @@ function checkGuessValidity (guess, answer){
     if (answerSubstring.indexOf(guessSubstring[j]) != -1){
       removeItem(ratings, j);
       insertItem(ratings, j, "gold");
+      insertItem(answerSubstring, answerSubstring.indexOf(guessSubstring[j]), "?");
+      removeItem(answerSubstring, answerSubstring.indexOf(guessSubstring[j]));
       if (getProperty(letter, "background-color") == "gray"){
         setProperty(letter, "background-color", "gold");
       }
