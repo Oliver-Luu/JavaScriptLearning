@@ -1,6 +1,7 @@
 //To-Do:
 //Update endGame screen
-//Add session statistics including % victory
+//Add session statistics including #played, % victory, current streak, max streak
+//Guess distribution
 
 
 //Icons are used from code.org's built in AppLab
@@ -32,6 +33,19 @@ var guess1 = "";
 var guess2 = "";
 var guess3 = "";
 var guess4 = "";
+
+var gamesPlayed = 0;
+var gamesWon = 0;
+var streak = 0;
+var maxStreak = 0;
+
+var firstTry = 0;
+var secondTry = 0;
+var thirdTry = 0;
+var fourthTry = 0;
+var fifthTry = 0;
+var sixthTry = 0;
+
 
 //Removes "null" in wordleAnswers
 for (var i = wordleAnswers.length-1; i > 0; i--){
@@ -193,7 +207,37 @@ onEvent("confirmationScreen", "keydown", function(keystroke) {
     }
 });
 
-
+function resetKeyboard(){
+  setGray("q");
+  setGray("w");
+  setGray("e");
+  setGray("r");
+  setGray("t");
+  setGray("y");
+  setGray("u");
+  setGray("i");
+  setGray("o");
+  setGray("p");
+  setGray("a");
+  setGray("s");
+  setGray("d");
+  setGray("f");
+  setGray("g");
+  setGray("h");
+  setGray("j");
+  setGray("k");
+  setGray("l");
+  setGray("z");
+  setGray("x");
+  setGray("c");
+  setGray("v");
+  setGray("b");
+  setGray("n");
+  setGray("m");
+}
+function setGray(item){
+  setProperty(item, "background-color", "gray");
+}
 //Sets screen to playable screen, and sets up text elements for confirmation and home pages
 function setWordleScreen(){
   setScreen("wordleScreen");
@@ -207,6 +251,11 @@ function newGame(){
   var random = randomNumber(0, wordleAnswers.length-1);
   setText("wordleNumber", "Wordle #" + random);
   setText("wordleLabel", "Wordle#" + random);
+  setText("guessesRemaining", "Guesses Remaining: 6");
+  setText("inProgress", "Game In Progress");
+  setText("enterButton", "Enter");
+  hideElement("guessesRemaining");
+  hideElement("inProgress");
   setText("restartOrNewGame", "Restart");
   setText("confirmationLabel", "Restart?");
   setText("confirmNewButton", "Restart");
@@ -220,21 +269,56 @@ function newGame(){
     setText("letter" + i, "");
     setProperty("letter" + i, "background-color", "black");
   }
+  resetKeyboard();
+  guess0 = "";
+  guess1 = "";
+  guess2 = "";
+  guess3 = "";
+  guess4 = "";
+  gamesPlayed++;
 }
 //Ends game and brings up play again screen
 function endGame(){
   gameOver = true;
   if (winner == true){
     setText("inProgress", "Wordle Victory!");
+    setText("endGameLabel", "You Won! \n" + "\n" + "The Wordle was: \n" + wordleSessionAnswer);
+    gamesWon++;
+    streak++;
+    if (streak > maxStreak){
+      maxStreak = streak;
+    }
+    if (guessAmount == 0){
+    setText("wordleLabel", "Genius");
+    firstTry++;
+  } else if (guessAmount == 1){
+    setText("wordleLabel", "Magnificent");
+    secondTry++;
+  } else if (guessAmount == 2){
+    setText("wordleLabel", "Impressive");
+    thirdTry++;
+  } else if (guessAmount == 3){
+    setText("wordleLabel", "Splendid");
+    fourthTry++;
+  } else if (guessAmount == 4){
+    setText("wordleLabel", "Great");
+    fifthTry++;
+  } else if (guessAmount == 5){
+    setText("wordleLabel", "Phew");
+    sixthTry++;
+    }
   } else {
     setText("inProgress", "Game Finished");
+    setText("wordleLabel", "Nice Try");
+    setText("endGameLabel", "Play Again? \n" + "\n" + "The Wordle was: \n" + wordleSessionAnswer);
+    streak = 0;
   }
-  setText("guessesRemaining", "Guesses Remaining: None");
+  setScreen("endGameScreen");
   setText("playButton", "Go To Puzzle");
+  setText("enterButton", "Finish");
   setText("restartOrNewGame", "New Game");
   setText("confirmNewButton", "New Game");
   setText("confirmationLabel", "New Game?");
-  setScreen("endGameScreen");
 }
 
 //Deletes a letter when called from the on-event statement above
@@ -343,8 +427,10 @@ function validGuessHandling(){
   } else if (getText("letter30") != "" && guessAmount == 5){
       guessAmount ++;
     }
-    if (endGame == false){
+    if (gameOver == false){
       setText("guessesRemaining", "Guesses Remaining: " + (6-guessAmount));
+    } else {
+      setText("guessesRemaining", "Guesses Remaining: None");
     }
   }
 
@@ -410,10 +496,11 @@ function setColorBoxAndSetWin () {
       setProperty("letter28", "background-color", ratings[2]);
       setProperty("letter29", "background-color", ratings[3]);
       setProperty("letter30", "background-color", ratings[4]);
-      endGame();
     }
   if ((ratings[0] == "green") && (ratings[1] == "green") && (ratings[2] == "green") && (ratings[3] == "green") && (ratings[4] == "green")){
     winner = true;
+    endGame();
+  } else if (guessAmount == 5){
     endGame();
   }
 }
@@ -429,8 +516,11 @@ function checkGuessValidity (guess, answer){
   var guessSubstring = [guess.substring(0, 1), guess.substring(1, 2), guess.substring(2, 3), guess.substring(3, 4), guess.substring(4, 5)];
   var answerSubstring = [answer.substring(0, 1), answer.substring(1, 2), answer.substring(2, 3), answer.substring(3, 4), answer.substring(4, 5)];
   var ratings = [];
+  var letter = "";
   for (var i = 0; i < 5; i++){
     if (guessSubstring[i] == answerSubstring[i]){
+      letter = guessSubstring[i].toLowerCase();
+      setProperty(letter, "background-color", "green");
       insertItem(ratings, i, "green");
       removeItem(guessSubstring, i);
       removeItem(answerSubstring, i);
@@ -441,9 +531,17 @@ function checkGuessValidity (guess, answer){
     }
   }
   for (var j = 0; j < 5; j++){
+    letter = guessSubstring[j].toLowerCase();
     if (answerSubstring.indexOf(guessSubstring[j]) != -1){
       removeItem(ratings, j);
       insertItem(ratings, j, "gold");
+      if (getProperty(letter, "background-color") == "gray"){
+        setProperty(letter, "background-color", "gold");
+      }
+  } else if (letter != "?" && letter != "!"){
+    if (getProperty(letter, "background-color") == "gray"){
+        setProperty(letter, "background-color", "black");
+      }
     }
   }
   return ratings;

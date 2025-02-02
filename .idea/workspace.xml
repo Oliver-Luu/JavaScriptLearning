@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e58532ac-8633-4c60-9861-e8a3c856e598" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Code.org/AP Exam/WordleGame" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Code.org/Spotify Search App/Top and Viral 50 Finder on Code.org December 2024" beforeDir="false" afterPath="$PROJECT_DIR$/Code.org/Spotify Search App/Top and Viral 50 Finder on Code.org December 2024" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,7 +124,7 @@
       <workItem from="1737753089677" duration="10086000" />
       <workItem from="1738005379577" duration="616000" />
       <workItem from="1738089103572" duration="19000" />
-      <workItem from="1738354901091" duration="6005000" />
+      <workItem from="1738354901091" duration="7269000" />
     </task>
     <servers />
   </component>
