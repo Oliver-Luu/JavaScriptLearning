@@ -1,10 +1,10 @@
-//To-Do:
-//Add session statistics including #played, % victory, current streak, max streak
-//Guess distribution
-
+//To-Do List:
+//Bugs:
+//2: During game, if user hits button on on-screen keyboard, then hits enter, last hit key will function
 
 //Icons are used from code.org's built in AppLab
 //Game design is inspired by NYT's Wordle Game found at https://www.nytimes.com/games/wordle/
+
 //The "Wordle" answers used in this app game from:
 //studio.code.org in the "Data" tab
 var wordleAnswers = getColumn("Wordle", "validWordleAnswer");
@@ -15,15 +15,17 @@ var wordleGuesses = getColumn("Wordle", "validWordleGuess");
 //studio.code.org in the "Data" tab
 var moreWords = getColumn("Words", "Word");
 var moreWordsLength = getColumn("Words", "Length");
+
 //wordleSessionAnswer is the word the player is trying to find (target word)
-//wordleGuess is the most recent inputted guess
+//wordleGuess is the most recent inputted guess (goes to be verified as valid guess)
 var wordleSessionAnswer = "";
 var wordleGuess = "";
+
 //guessAmount is the amount of guesses a player has made
 //letterPosition is the position the player has written to, or is deleting from
 var guessAmount = 0;
 var letterPosition = 0;
-//These determine whether the game ends, and what displays after gameover
+//These determine what displays after gameover, and what functions to disable
 var gameOver = false;
 var winner = false;
 //Used to prevent duplicate answers from being submitted
@@ -33,18 +35,17 @@ var guess2 = "";
 var guess3 = "";
 var guess4 = "";
 
+//Variables used to track "Wordle" statistics
 var gamesPlayed = 0;
 var gamesWon = 0;
 var streak = 0;
 var maxStreak = 0;
-
 var firstTry = 0;
 var secondTry = 0;
 var thirdTry = 0;
 var fourthTry = 0;
 var fifthTry = 0;
 var sixthTry = 0;
-
 
 //Removes "null" in wordleAnswers
 for (var i = wordleAnswers.length-1; i > 0; i--){
@@ -53,28 +54,132 @@ for (var i = wordleAnswers.length-1; i > 0; i--){
     removeItem(wordleAnswers, i);
   }
 }
-//Adds more words from "moreWords" list for more "guesses"
+//Adds more words from "moreWords" list for more guess possibilities
 for (var i = 0; i < moreWords.length; i++){
   if (moreWordsLength[i] == 5){
     appendItem(wordleGuesses, moreWords[i]);
   }
 }
-//Adds words from "wordleAnswers" list for more "guesses" (surprising, not all validWordleAnswers are in  validWordleGuess)
+//Adds words from "wordleAnswers" list for more "guesses" (surprising that not all validWordleAnswers are invalidWordleGuess)
 for (var i = 0; i < wordleAnswers.length; i++){
   appendItem(wordleGuesses, wordleAnswers[i]);
 }
 //Adds the word "crane" to wordleGuesses since I actually use this word alot for my first guess
 appendItem(wordleGuesses, "crane");
-
 //Prepares the board for a new game on program startup
 newGame();
 
 //Transitions from loading screen to home screen
 setScreen("homeScreen");
 
+
+//Go to Wordle Screen from Home Screen + sets up board, etc.
+onEvent("playButton", "click", setWordleScreen);
+onEvent("homeScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Enter"){
+      setWordleScreen();
+    }
+});
+
+//Deleting letters "on event" - calls deleteLetter function
+onEvent("deleteButton", "click", deleteLetter);
+onEvent("wordleScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Backspace"){
+      deleteLetter();
+    }
+});
+
+//Sends Wordle guess to be evaluated - calls checkValidGuess function
+//"setScreen("wordleScreen")" prevents an issue where hitting the on-screen keyboard, then hitting "Enter"
+//will print the last pressed key on the screen (including backspace/delete), rather than doing the expected behavior
+onEvent("enterButton", "click", checkValidGuess);
+onEvent("wordleScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Enter"){
+      setScreen("wordleScreen");
+      checkValidGuess();
+    }
+});
+
+//Go To Home Screen from Wordle Screen
+onEvent("homeButton", "click", function(){
+  setScreen("homeScreen");
+});
+onEvent("wordleScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Esc"){
+      setScreen("homeScreen");
+    }
+});
+
+//Go to wordleScreen From endGameScreen
+onEvent("goToPuzzleButton", "click", function(){
+  setScreen("wordleScreen");
+});
+onEvent("endGameScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Backspace"){
+      setScreen("wordleScreen");
+    }
+});
+
+//Go to homeScreen From endGameScreen
+onEvent("goToHomeButton", "click", function(){
+  setText("playButton", "Go To Puzzle");
+  setScreen("homeScreen");
+});
+onEvent("endGameScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Esc"){
+      setScreen("homeScreen");
+    }
+});
+
+//Sends player to confirmation screen to verify if they really want to restart/new game
+onEvent("restartOrNewGame", "click", function(){
+  setScreen("confirmationScreen");
+});
+onEvent("homeScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Esc"){
+      setScreen("confirmationScreen");
+    }
+});
+
+//Restarting or New Game "on events"
+onEvent("confirmNewButton", "click", function(){
+  newGame();
+  setScreen("wordleScreen");
+});
+onEvent("confirmationScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Enter"){
+      newGame();
+      setScreen("wordleScreen");
+    }
+});
+onEvent("newGameButton", "click", function(){
+  newGame();
+  setScreen("wordleScreen");
+});
+onEvent("endGameScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Enter"){
+      newGame();
+      setScreen("wordleScreen");
+    }
+});
+
+//If the user decides not to restart the game, and instead go back to homeScreen
+onEvent("goBackButton", "click", function(){
+  setScreen("homeScreen");
+});
+onEvent("confirmationScreen", "keydown", function(keystroke) {
+    if (keystroke.key == "Esc"){
+      setScreen("homeScreen");
+    }
+});
+
 //onEvent for when user inputs a character into the keyboard
+//"setScreen("wordleScreen")" prevents an issue where hitting the on-screen keyboard, then hitting the spacebar
+//will print the last pressed key on the screen (including backspace/delete), rather than doing the expected behavior of nothing
 onEvent("wordleScreen", "keypress", function(keystroke){
+  setScreen("wordleScreen");
   //Checks if inputted keystroke is a alphabetical character using an ASCII table (assistance from OpenAI's ChatGPT)
+  //Checks if the game is over (in which no input will be acceptted if game is over)
   if ((((keystroke.key).charCodeAt(0) >= 97 && (keystroke.key).charCodeAt(0) <= 122) ||
   ((keystroke.key).charCodeAt(0) >= 65 && (keystroke.key).charCodeAt(0) <= 90)) && gameOver == false){
   //Checks how many guesses the user has made (used to determine which "wordle" line to write to)
@@ -124,89 +229,7 @@ onEvent("wordleScreen", "keypress", function(keystroke){
   }
 });
 
-//Deleting letters "on event" - calls deleteLetter function
-onEvent("deleteButton", "click", deleteLetter);
-onEvent("wordleScreen", "keydown", function(keystroke) {
-    if (keystroke.key == "Backspace"){
-      deleteLetter();
-    }
-});
-//Sends Wordle guess to be evaluated - calls checkValidGuess function
-onEvent("enterButton", "click", checkValidGuess);
-onEvent("wordleScreen", "keydown", function(keystroke) {
-    if (keystroke.key == "Enter"){
-      checkValidGuess();
-    }
-});
-
-//Go to Wordle Screen from Home Screen
-onEvent("playButton", "click", setWordleScreen);
-onEvent("homeScreen", "keydown", function(keystroke) {
-    if (keystroke.key == "Enter"){
-      setWordleScreen();
-    }
-});
-//Go To Home Screen from Wordle Screen
-onEvent("homeButton", "click", function(){
-  setScreen("homeScreen");
-});
-onEvent("wordleScreen", "keydown", function(keystroke) {
-    if (keystroke.key == "Esc"){
-      setScreen("homeScreen");
-    }
-});
-//Go to wordleScreen From endGameScreen
-onEvent("goToPuzzleButton", "click", function(){
-  setScreen("wordleScreen");
-});
-onEvent("endGameScreen", "keydown", function(keystroke) {
-    if (keystroke.key == "Backspace"){
-      setScreen("wordleScreen");
-    }
-});
-//Go to homeScreen From endGameScreen
-onEvent("goToHomeButton", "click", function(){
-  setText("playButton", "Go To Puzzle");
-  setScreen("homeScreen");
-});
-onEvent("endGameScreen", "keydown", function(keystroke) {
-    if (keystroke.key == "Esc"){
-      setScreen("homeScreen");
-    }
-});
-//Restarting or New Game "on events"
-onEvent("restartOrNewGame", "click", function(){
-  setScreen("confirmationScreen");
-});
-onEvent("confirmNewButton", "click", function(){
-  newGame();
-  setScreen("wordleScreen");
-});
-onEvent("confirmationScreen", "keydown", function(keystroke) {
-    if (keystroke.key == "Enter"){
-      newGame();
-      setScreen("wordleScreen");
-    }
-});
-onEvent("newGameButton", "click", function(){
-  newGame();
-  setScreen("wordleScreen");
-});
-onEvent("endGameScreen", "keydown", function(keystroke) {
-    if (keystroke.key == "Enter"){
-      newGame();
-      setScreen("wordleScreen");
-    }
-});
-onEvent("goBackButton", "click", function(){
-  setScreen("homeScreen");
-});
-onEvent("confirmationScreen", "keydown", function(keystroke) {
-    if (keystroke.key == "Esc"){
-      setScreen("homeScreen");
-    }
-});
-
+//onEvents for on-screen keyboard found on Wordle Screen for character input
 onEvent("a", "click", function(){
   onScreenKeyboardInput("A");
 });
@@ -285,7 +308,13 @@ onEvent("y", "click", function(){
 onEvent("z", "click", function(){
   onScreenKeyboardInput("Z");
 });
+
+
+//key {string} - recieves string input from onEvents above for letter input on screen
+//Output is "key" inputted being shown on screen
+//Basically a copy of the onEvent above, modified for use on the on-Screen keyboard
 function onScreenKeyboardInput(key){
+  if (gameOver == false){
   if (guessAmount == 0){
     //Limits the user to only input characters one row at a time
     if (letterPosition < 5){
@@ -329,38 +358,39 @@ function onScreenKeyboardInput(key){
       hideElement("errorLabel");
       }
     }
+  }
 }
+
+//Resets black-gray-yellow-green keyboard back to all gray for a new Wordle game
 function resetKeyboard(){
-  setGray("q");
-  setGray("w");
-  setGray("e");
-  setGray("r");
-  setGray("t");
-  setGray("y");
-  setGray("u");
-  setGray("i");
-  setGray("o");
-  setGray("p");
-  setGray("a");
-  setGray("s");
-  setGray("d");
-  setGray("f");
-  setGray("g");
-  setGray("h");
-  setGray("j");
-  setGray("k");
-  setGray("l");
-  setGray("z");
-  setGray("x");
-  setGray("c");
-  setGray("v");
-  setGray("b");
-  setGray("n");
-  setGray("m");
+setProperty("q", "background-color", "gray");
+setProperty("w", "background-color", "gray");
+setProperty("e", "background-color", "gray");
+setProperty("r", "background-color", "gray");
+setProperty("t", "background-color", "gray");
+setProperty("y", "background-color", "gray");
+setProperty("u", "background-color", "gray");
+setProperty("i", "background-color", "gray");
+setProperty("o", "background-color", "gray");
+setProperty("p", "background-color", "gray");
+setProperty("a", "background-color", "gray");
+setProperty("s", "background-color", "gray");
+setProperty("d", "background-color", "gray");
+setProperty("f", "background-color", "gray");
+setProperty("g", "background-color", "gray");
+setProperty("h", "background-color", "gray");
+setProperty("j", "background-color", "gray");
+setProperty("k", "background-color", "gray");
+setProperty("l", "background-color", "gray");
+setProperty("z", "background-color", "gray");
+setProperty("x", "background-color", "gray");
+setProperty("c", "background-color", "gray");
+setProperty("v", "background-color", "gray");
+setProperty("b", "background-color", "gray");
+setProperty("n", "background-color", "gray");
+setProperty("m", "background-color", "gray");
 }
-function setGray(item){
-  setProperty(item, "background-color", "gray");
-}
+
 //Sets screen to playable screen, and sets up text elements for confirmation and home pages
 function setWordleScreen(){
   setScreen("wordleScreen");
@@ -369,11 +399,20 @@ function setWordleScreen(){
   showElement("inProgress");
   showElement("guessesRemaining");
 }
+
 //Prepares the "Wordle" board for a new game
+//while loop ensures that a brand new word will appear every new game
 function newGame(){
   var random = randomNumber(0, wordleAnswers.length-1);
-  setText("wordleNumber", "Wordle #" + random);
-  setText("wordleLabel", "Wordle#" + random);
+  wordleSessionAnswer = (wordleAnswers[random]).toUpperCase();
+  while (wordleSessionAnswer == "*****"){
+    random = randomNumber(0, wordleAnswers.length-1);
+    wordleSessionAnswer = (wordleAnswers[random]).toUpperCase();
+  }
+  removeItem(wordleAnswers, random);
+  insertItem(wordleAnswers, random, "*****");
+  setText("wordleNumber", "Wordle #" + (random + 1));
+  setText("wordleLabel", "Wordle#" + (random + 1));
   setText("guessesRemaining", "Guesses Remaining: 6");
   setText("inProgress", "Game In Progress");
   setText("enterButton", "Enter");
@@ -383,7 +422,6 @@ function newGame(){
   setText("confirmationLabel", "Restart?");
   setText("confirmNewButton", "Restart");
   setText("playButton", "Play");
-  wordleSessionAnswer = (wordleAnswers[random]).toUpperCase();
   guessAmount = 0;
   letterPosition = 0;
   gameOver = false;
@@ -400,6 +438,7 @@ function newGame(){
   guess4 = "";
   gamesPlayed++;
 }
+
 //Ends game and brings up play again screen
 function endGame(){
 var message = "";
@@ -436,7 +475,7 @@ gameOver = true;
     sixthTry++;
     }
     setText("inProgress", "Wordle Victory!");
-    setText("endGameLabel", message + "\n" + "You Won! \n" + "\n" + "The Wordle was: \n" + wordleSessionAnswer);
+    setText("endGameLabel", message + "\n" + "You Won! \n" + "\n" + "The Wordle was: \n" + '"' + wordleSessionAnswer + '"');
   } else {
     setText("inProgress", "Game Finished");
     setText("wordleLabel", "Nice Try");
@@ -449,6 +488,7 @@ gameOver = true;
   setText("restartOrNewGame", "New Game");
   setText("confirmNewButton", "New Game");
   setText("confirmationLabel", "New Game?");
+  setText("statsticsLabel", "Games Played: " + gamesPlayed + "  " + "Win%: " + Math.round((gamesWon/gamesPlayed)*100) + "%" + "\n" + "Current Streak: " + streak + "\n" + "Max Streak: " + maxStreak + "\n" + "\n" + "Guess Distribution: " + "\n" + "#1:" + firstTry + " " + "#2:" + secondTry+ " " + "#3:" + thirdTry+ " " + "#4:" + fourthTry+ " " + "#5:" + fifthTry+ " " + "#6:" + sixthTry);
 }
 
 //Deletes a letter when called from the on-event statement above
@@ -537,6 +577,7 @@ function checkValidGuess(){
 //Calls function to set box color
 //Sets "guess" variable for duplicates verification
 //Increases "guessAmount" by +1
+//Sets "guessesRemaining" whether game is over or how many guesses the user has made
 function validGuessHandling(){
   setColorBoxAndSetWin();
     if (getText("letter5") != "" && guessAmount == 0){
@@ -564,7 +605,7 @@ function validGuessHandling(){
     }
   }
 
-//Handles situation where user guess is invalid and displays error message
+//Handles situation where user guess is invalid and displays appropriate error message
 function userErrorHandling(){
   if(wordleGuess == ""){
     setText("errorLabel", "No Guess Provided");
@@ -587,7 +628,9 @@ function userErrorHandling(){
       }
     showElement("errorLabel");
 }
+
 //Sets the color of the boxes and checks to see if game has been won
+//If game has been won and/or max guesses has been achieved, game will end and "winner" variable will be set accordingly
 function setColorBoxAndSetWin () {
   var ratings = checkGuessValidity(wordleGuess, wordleSessionAnswer);
     if (guessAmount == 0){
@@ -650,8 +693,10 @@ function checkGuessValidity (guess, answer){
   var letter = "";
   for (var i = 0; i < 5; i++){
     if (guessSubstring[i] == answerSubstring[i]){
+      //This is for the on-screen keyboard colors
       letter = guessSubstring[i].toLowerCase();
       setProperty(letter, "background-color", "green");
+      //This is for the game board colors
       insertItem(ratings, i, "green");
       removeItem(guessSubstring, i);
       removeItem(answerSubstring, i);
@@ -664,13 +709,17 @@ function checkGuessValidity (guess, answer){
   for (var j = 0; j < 5; j++){
     letter = guessSubstring[j].toLowerCase();
     if (answerSubstring.indexOf(guessSubstring[j]) != -1){
+      //This is for the game board colors
       removeItem(ratings, j);
       insertItem(ratings, j, "gold");
       insertItem(answerSubstring, answerSubstring.indexOf(guessSubstring[j]), "?");
       removeItem(answerSubstring, answerSubstring.indexOf(guessSubstring[j]));
       if (getProperty(letter, "background-color") == "gray"){
+        //This is for the on-screen keyboard colors
+        //This is wrapped in an if-statement since if the keyboard character color is already green, we do not want to change it to yellow
         setProperty(letter, "background-color", "gold");
       }
+    //If the character guessed does not exist in the word at all, set the keyboard character color to black
   } else if (letter != "?" && letter != "!"){
     if (getProperty(letter, "background-color") == "gray"){
         setProperty(letter, "background-color", "black");
